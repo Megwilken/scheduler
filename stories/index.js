@@ -27,6 +27,8 @@ import Confirm from "components/Appointment/Confirm.js";
 
 import Status from "components/Appointment/Status.js";
 
+import Error from "components/Appointment/Error.js";
+
 storiesOf("Button", module)
   .addParameters({
     backgrounds: [{ name: "dark", value: "#222f3e", default: true }]
@@ -161,4 +163,5 @@ storiesOf("InterviewerListItem", module)
   .add("Show", () => <Show student="Lydia Miller-Jones" interviewer={interviewers} onEdit={action("onEdit")} onDelete={action("onDelete")} />)
   .add("Confirm", () => <Confirm message="Delete the appointment?" onConfirm={action("onConfirm")} onCancel={action("onCancel")} />)
   .add("Status", () => <Status message="Deleting" />)
+  .add("Error", () => <Error message="Could not delete appointment." onClose={action("onClose")} />)
 
