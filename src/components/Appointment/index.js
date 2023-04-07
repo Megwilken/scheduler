@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "components/Appointment/styles.scss";
 
 import Header from "components/Appointment/Header";
@@ -21,6 +21,7 @@ const CREATE = "CREATE";
 const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
+const EDIT = "EDIT";
 
 
 export default function Appointment(props) {
@@ -28,8 +29,25 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
+  const [interview, setInterview] = useState(props.interview);
+
   const onAdd = () => {
     transition(CREATE);
+  };
+
+  const edit = () => {
+    transition(EDIT);
+  };
+
+  const update = (name, interviewer) => {
+    transition(SAVING);
+    const newInterview = {
+      student: name,
+      interviewer: interviewer,
+    };
+    props.bookInterview(props.id, newInterview).then(() => {
+    transition(SHOW);
+  });
   };
 
   function save(name, interviewer) {
@@ -71,6 +89,7 @@ export default function Appointment(props) {
           student={props.interview.student}
           interviewer={props.interview.interviewer}
           onDelete={() => transition(CONFIRM)}
+          onEdit={edit}
         />
       )}
       {mode === CREATE && (
@@ -90,6 +109,16 @@ export default function Appointment(props) {
         message="Are you sure you would like to delete?"
         />
       )}
+      {mode === EDIT && (
+        <Form
+          defaultName={interview.student}
+          defaultInterviewer={interview.interviewer.id}
+          interviewers={props.interviewers}
+          onCancel={back}
+          onSave={update}
+        />
+      )}
+
     </article>
   );
 }
