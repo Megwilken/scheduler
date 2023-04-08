@@ -72,8 +72,13 @@ export default function Application(props) {
       [id]: appointment,
     };
     setState({ ...state, appointments })
+  })
+  .catch((error) => {
+    setState({ ...state, error: error.message });
+    throw error;
   });
   }
+
   
   const schedule = dailyAppointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
