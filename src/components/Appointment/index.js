@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import "components/Appointment/styles.scss";
 
 import Header from "components/Appointment/Header";
@@ -32,15 +32,13 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
-  const [interview, setInterview] = useState(props.interview);
+  // const [interview, setInterview] = useState(props.interview);
 
   const onAdd = () => {
     transition(CREATE);
   };
 
-  const edit = () => {
-    transition(EDIT);
-  };
+
 
   const update = (name, interviewer) => {
     transition(SAVING);
@@ -58,7 +56,7 @@ export default function Appointment(props) {
   const save = (name, interviewer) => {
       const interview = {
       student: name,
-      interviewer: interviewer,
+      interviewer,
     };
 
     transition(SAVING);
@@ -100,16 +98,16 @@ export default function Appointment(props) {
       {mode === SHOW && (
         <Show
           student={props.interview.student}
-          interviewer={props.interview.interviewer}
+          interviewer={props.interview.interviewer.name}
           onDelete={() => transition(CONFIRM)}
-          onEdit={edit}
+          onEdit={() => transition (EDIT)}
         />
       )}
       {mode === CREATE && (
         <Form
           interviewer={props.interviewer}
           interviewers={props.interviewers}
-          onCancel={back}
+          onCancel={() => back(EMPTY)}
           onSave={save}
         />
       )}
@@ -124,8 +122,9 @@ export default function Appointment(props) {
       )}
       {mode === EDIT && (
         <Form
-          defaultName={interview.student}
-          defaultInterviewer={interview.interviewer.id}
+          defaultName={props.interview.student}
+          defaultInterviewer={props.interview.interviewer.id}
+
           interviewers={props.interviewers}
           onCancel={back}
           onSave={update}
