@@ -52,11 +52,8 @@ export default function useApplicationData() {
     setState({ ...state, appointments });
     return axios.put(
       `http://localhost:8001/api/appointments/${id}`,
-      { interview })
-    .then(() => {
-      const newDays = updateSpots(state.day, state.days, appointments);
-      setState({ ...state, appointments, days: newDays });
-    }); 
+      { interview }
+    );
   }
 
   const cancelInterview = (id, interview) => {
@@ -71,8 +68,7 @@ export default function useApplicationData() {
           ...state.appointments,
           [id]: appointment,
         };
-        const newDays = updateSpots(state.day, state.days, appointments);
-        setState({ ...state, appointments, days: newDays });
+        setState({ ...state, appointments });
       })
       .catch((error) => {
         setState({ ...state, error: error.message });
@@ -80,24 +76,5 @@ export default function useApplicationData() {
       });
   };
 
-  const updateSpots = (day, days, appointments) => {
-    const dayObj = days.find((dayObj) => dayObj.name === day);
-    const appointmentsForDay = dayObj.appointments.map(
-      (id) => appointments[id]
-    );
-    const spots = appointmentsForDay.filter(
-      (appointment) => appointment.interview === null
-    ).length;
-    const newDay = { ...dayObj, spots };
-    const newDays = days.map((day) => {
-      if (day.name === newDay.name) {
-        return newDay;
-      }
-      return day;
-    });
-    return newDays;
-  };
-
-
-  return { state, setDay, bookInterview, cancelInterview, dailyAppointments, interviewers, updateSpots };
+  return { state, setDay, bookInterview, cancelInterview, dailyAppointments, interviewers };
 }
